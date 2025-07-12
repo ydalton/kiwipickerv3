@@ -1,0 +1,23 @@
+<form (ngSubmit)="onSubmit()" #stationForm="ngForm">
+  <div class="my-4 flex justify-center gap-2 items-center">
+    <label for="name">Name:</label>
+    <input type="text"
+           name="name"
+           class="border-2 border-neutral-500 p-1 rounded-sm"
+           required
+           #name="ngModel"
+           [(ngModel)]="station.name" />
+    <label for="url">URL:</label>
+    <input type="url"
+           name="url"
+           #url="ngModel"
+           required
+           class="border-2 border-neutral-500 p-1 rounded-sm"
+           [(ngModel)]="station.url" />
+    <button type="submit"
+            [disabled]="!stationForm.form.valid"
+            class="p-2 bg-blue-700 text-white rounded-sm border-2 border-blue-900 disabled:bg-neutral-500 disabled:border-neutral-900">
+      Add
+    </button>
+  </div>
+</form>

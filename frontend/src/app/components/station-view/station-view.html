@@ -1,0 +1,12 @@
+<div class="relative bg-neutral-400 hover:bg-neutral-300 p-4 w-full h-full rounded-sm min-h-[150px] border border-neutral-900 flex justify-center items-center">
+  <button (click)="deleteStation()" class="absolute top-1 right-1 w-8 h-8 bg-red-500 text-white border-2 border-red-800 flex justify-center items-center rounded-full text-xl cursor-pointer">
+    x
+  </button>
+  <a [href]="station.url" target="_blank" class="w-full h-full flex items-center justify-center">
+    <div class="font-bold w-full h-full flex justify-center items-center">
+      <p>
+        {{station.name}}
+      </p>
+    </div>
+  </a>
+</div>

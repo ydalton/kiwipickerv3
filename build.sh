@@ -37,7 +37,7 @@ popd
 echo "Building frontend..."
 pushd $FRONTEND_DIR
 npm run build
-mv dist/* ../$DIST/static
+mv dist/frontend/browser/* ../$DIST/static
 popd
 
 echo "Creating zip file..."

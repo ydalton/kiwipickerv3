@@ -1,0 +1,19 @@
+<main>
+  <h1 class="text-3xl font-bold text-center">SDRpicker</h1>
+  <station-form (refreshRequested)="onRefreshRequested()"/>
+  <div class="p-4">
+    <div class="grid xl:grid-cols-5 md:grid-cols-3 gap-2 grid-cols-1">
+      @if (stations.length > 0)
+      {
+        @for(station of stations; track station.id)
+        {
+          <station-view [station]="station" (refreshRequested)="onRefreshRequested()" />
+        }
+      }
+      @else
+      {
+        <p>No stations found.</p>
+      }
+    </div>
+  </div>
+</main>
