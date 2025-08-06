@@ -1,22 +1,22 @@
 <form (ngSubmit)="onSubmit()" #stationForm="ngForm">
-  <div class="my-4 flex justify-center gap-2 items-center">
-    <label for="name">Name:</label>
+  <div class="my-4 grid grid-cols-[max-content_1fr] md:flex justify-center md:items-center items-end gap-2">
+    <label for="name" class="me-2">Name:</label>
     <input type="text"
-           name="name"
-           class="border-2 border-neutral-500 p-1 rounded-sm"
-           required
-           #name="ngModel"
-           [(ngModel)]="station.name" />
-    <label for="url">URL:</label>
+            name="name"
+            class="border-2 border-neutral-500 p-1 rounded-sm"
+            required
+            #name="ngModel"
+            [(ngModel)]="station.name" />
+    <label for="url" class="me-2">URL:</label>
     <input type="url"
-           name="url"
-           #url="ngModel"
-           required
-           class="border-2 border-neutral-500 p-1 rounded-sm"
-           [(ngModel)]="station.url" />
+            name="url"
+            #url="ngModel"
+            required
+            class="border-2 border-neutral-500 p-1 rounded-sm"
+            [(ngModel)]="station.url" />
     <button type="submit"
             [disabled]="!stationForm.form.valid"
-            class="p-2 bg-blue-700 text-white rounded-sm border-2 border-blue-900 disabled:bg-neutral-500 disabled:border-neutral-900">
+            class="p-2 col-span-2 bg-blue-700 text-white rounded-sm border-2 border-blue-900 disabled:bg-neutral-500 disabled:border-neutral-900">
       Add
     </button>
   </div>

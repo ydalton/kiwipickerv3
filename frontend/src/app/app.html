@@ -1,6 +1,24 @@
 <main>
   <h1 class="text-3xl font-bold text-center">SDRpicker</h1>
-  <station-form (refreshRequested)="onRefreshRequested()"/>
+  <div class="relative">
+    <div class="flex justify-center">
+      <fieldset class="xl:absolute right-0 top-0 flex space-x-2 border-black border-2 p-2 mx-2 rounded-md">
+        <legend class="px-1">Database</legend>
+        <div>
+          <input #databaseFile type="file" class="hidden" (change)="onUpload($event)" accept="application/x-sqlite3">
+          <app-button (click)="onImportButtonClicked()">
+            Import
+          </app-button>
+        </div>
+        <app-button (click)="onExportButtonClicked()">
+          Export
+        </app-button>
+      </fieldset>
+    </div>
+    <div class="flex justify-center">
+      <station-form (refreshRequested)="onRefreshRequested()"/>
+    </div>
+  </div>
   <div class="p-4">
     <div class="grid xl:grid-cols-5 md:grid-cols-3 gap-2 grid-cols-1">
       @if (stations.length > 0)
