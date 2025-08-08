@@ -1,24 +1,30 @@
 package be.ydalton.sdrpicker
 
+import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.webkit.ValueCallback
 import android.webkit.WebView
 import androidx.activity.ComponentActivity
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import kotlinx.coroutines.CompletableDeferred
 import java.io.File
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
+import androidx.core.net.toUri
 
 class SDRPickerActivity : ComponentActivity() {
     private val kiwipickerExecutableName = "libkiwipicker.so"
     private var kiwipickerProcess: Process? = null
+    private var uploadCallback: ValueCallback<Array<out Uri?>?>? = null
+
+    companion object {
+        private const val FILE_CHOOSER_REQUEST_CODE = 1001
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,10 +102,60 @@ class SDRPickerActivity : ComponentActivity() {
     @SuppressLint("SetJavaScriptEnabled")
     private fun loadWebView() {
         val webView = WebView(this)
-        webView.webChromeClient = SDRPickerWebChromeClient()
+        webView.webChromeClient = object : SDRPickerWebChromeClient() {
+            override fun onShowFileChooser(
+                webView: WebView?,
+                filePathCallback: ValueCallback<Array<out Uri?>?>?,
+                fileChooserParams: FileChooserParams?
+            ): Boolean {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 100)
+                    }
+                }
+
+                if (uploadCallback != null) {
+                    uploadCallback?.onReceiveValue(null)
+                    uploadCallback = null
+                }
+
+                uploadCallback = filePathCallback
+
+                val intent = Intent(Intent.ACTION_GET_CONTENT)
+                intent.addCategory(Intent.CATEGORY_OPENABLE)
+                // SQLite file is not a valid mimetype according to Android
+                intent.type = "*/*"
+                startActivityForResult(intent, FILE_CHOOSER_REQUEST_CODE)
+
+                return true
+            }
+        }
         webView.settings.javaScriptEnabled = true
         webView.loadUrl("http://localhost:3000")
         setContentView(webView)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
+        super.onActivityResult(requestCode, resultCode, intent)
+
+        if (requestCode == FILE_CHOOSER_REQUEST_CODE) {
+            if (uploadCallback == null)
+                return;
+
+            var result: Array<Uri>? = null
+
+            if (resultCode == RESULT_OK) {
+                if (intent != null) {
+                    val dataString = intent.dataString;
+                    if (dataString != null) {
+                        result = arrayOf(dataString.toUri())
+                    }
+                }
+            }
+
+            uploadCallback?.onReceiveValue(result)
+            uploadCallback = null;
+        }
     }
 
     override fun onDestroy() {

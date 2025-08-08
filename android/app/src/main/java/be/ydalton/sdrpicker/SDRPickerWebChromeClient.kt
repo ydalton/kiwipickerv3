@@ -1,20 +1,11 @@
 package be.ydalton.sdrpicker
 
-import android.app.Activity
 import android.app.AlertDialog
-import android.content.ActivityNotFoundException
-import android.content.DialogInterface
-import android.content.Intent
-import android.net.Uri
 import android.webkit.JsResult
-import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
 import android.webkit.WebView
-import android.widget.Toast
-import androidx.activity.ComponentActivity
-import androidx.core.app.ActivityCompat.startActivityForResult
 
-class SDRPickerWebChromeClient() : WebChromeClient() {
+open class SDRPickerWebChromeClient() : WebChromeClient() {
     override fun onJsConfirm(
         view: WebView?,
         url: String?,
@@ -48,9 +39,5 @@ class SDRPickerWebChromeClient() : WebChromeClient() {
             .show()
 
         return true
-    }
-
-    companion object {
-        const val REQUEST_FILE_CHOOSER = 1001
     }
 }
