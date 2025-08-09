@@ -2,6 +2,7 @@ package be.ydalton.sdrpicker
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -10,14 +11,13 @@ import android.os.Bundle
 import android.util.Log
 import android.webkit.ValueCallback
 import android.webkit.WebView
-import androidx.activity.ComponentActivity
 import kotlinx.coroutines.CompletableDeferred
 import java.io.File
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 import androidx.core.net.toUri
 
-class SDRPickerActivity : ComponentActivity() {
+class SDRPickerActivity : Activity() {
     private val kiwipickerExecutableName = "libkiwipicker.so"
     private var kiwipickerProcess: Process? = null
     private var uploadCallback: ValueCallback<Array<out Uri?>?>? = null

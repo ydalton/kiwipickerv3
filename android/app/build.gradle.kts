@@ -20,6 +20,10 @@ android {
 
     ndkVersion = "29.0.13846066"
 
+    lint {
+        disable += "ExpiredTargetSdkVersion"
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -27,6 +31,10 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            isDebuggable = false
+        }
+        debug {
+            isDebuggable = true
         }
     }
     compileOptions {
